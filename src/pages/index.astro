@@ -1,10 +1,12 @@
 ---
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 import Card from '../components/Card.astro'
 import Header from '../components/Header.astro'
 import Hero from '../components/Hero.astro'
 import Layout from '../layouts/Layout.astro'
 
-const allPosts = await Astro.glob('../content/tips/*.md')
+const allPosts: CollectionEntry<'tips'>[] = await getCollection('tips')
 ---
 
 <Layout title="Welcome to Astro.">
@@ -13,11 +15,12 @@ const allPosts = await Astro.glob('../content/tips/*.md')
 		<Hero />
 		<ul role="list" class="link-card-grid">
 			{
-				allPosts.map((item) => (
+				allPosts.map((post) => (
 					<Card
-						title={item?.frontmatter?.title}
-						date={item?.frontmatter?.pubDate}
-						tags={item?.frontmatter?.tags}
+						title={post.data.title}
+						date={post.data.pubDate}
+						tags={post.data.tags}
+						slug={post.slug}
 					/>
 				))
 			}

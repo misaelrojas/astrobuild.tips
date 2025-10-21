@@ -1,15 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-
+import type { CollectionEntry } from 'astro:content'
 import Card from '../../components/Card.astro'
 import Header from '../../components/Header.astro'
 import Hero from '../../components/Hero.astro'
 
 import { getCollection } from 'astro:content'
 
-const allPosts = (await getCollection('tips')).sort((a: any, b: any) => {
-	return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-})
+const allPosts: CollectionEntry<'tips'>[] = (await getCollection('tips')).sort(
+	(a: any, b: any) => {
+		return (
+			new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+		)
+	},
+)
 
 console.log(allPosts, allPosts)
 ---
@@ -20,7 +24,7 @@ console.log(allPosts, allPosts)
 		<Hero />
 		<ul role="list" class="link-card-grid">
 			{
-				allPosts.map((post: any) => (
+				allPosts.map((post) => (
 					<Card
 						title={post.data.title}
 						date={post.data.pubDate}
