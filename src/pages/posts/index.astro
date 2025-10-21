@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro'
+
+import Card from '../../components/Card.astro'
+import Header from '../../components/Header.astro'
+import Hero from '../../components/Hero.astro'
+
+import { getCollection } from 'astro:content'
+
+const allPosts = (await getCollection('tips')).sort((a: any, b: any) => {
+	return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+})
+
+console.log(allPosts, allPosts)
+---
+
+<Layout title="Welcome to Astro.">
+	<main>
+		<Header title="AstroBuild.tips" />
+		<Hero />
+		<ul role="list" class="link-card-grid">
+			{
+				allPosts.map((post: any) => (
+					<Card
+						title={post.data.title}
+						date={post.data.pubDate}
+						tags={post.data.tags}
+						slug={post.slug}
+					/>
+				))
+			}
+		</ul>
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1.5rem;
+		max-width: 60ch;
+	}
+
+	.link-card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+		gap: 1rem;
+		padding: 0;
+	}
+</style>
