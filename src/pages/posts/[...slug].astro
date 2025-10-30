@@ -3,6 +3,10 @@ import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 import Base from '../../layouts/Base.astro'
 import PostsLayout from '../../layouts/Posts.astro'
+import Header from '../../components/Header.tsx'
+import Footer from '../../components/Footer.vue'
+import Social from '../../components/Social.svelte'
+import HeaderTop from '../../components/HeaderTop.tsx'
 
 export async function getStaticPaths() {
 	const posts = await getCollection('tips')
@@ -17,11 +21,37 @@ type Props = CollectionEntry<'tips'>
 const post = Astro.props as Props
 const { Content } = await post.render()
 
-console.log(post)
+// console.log(post)
+/*
+
+De forma predeterminada, un componente de framework no está hidratado en el cliente. Si no se proporciona la directiva 
+client:*, tu HTML se representa en la página sin JavaScript.
+
+Estos son los valores que puede tener la directiva client:
+
+client:load: Cargue e hidrate el JavaScript del componente inmediatamente al cargar la página.
+
+client:idle: Cargue e hidrate el componente JavaScript una vez que la página haya terminado con su carga inicial
+
+client:visible: Cargue e hidrate el JavaScript del componente una vez que haya ingresado al viewport del usuario. 
+Esto utiliza un IntersectionObserver internamente para realizar un seguimiento de la visibilidad.
+
+client:media: client:media={string} carga e hidrata el componente JavaScript una vez que se cumple una determinada 
+media query de CSS.
+
+client:only: ¡Debes pasar el framework correcto al componente! Debido a que Astro no ejecuta el componente durante su 
+compilación/en el servidor, Astro no sabe qué framework usa el componente a menos que se lo indiques explícitamente.
+*/
 ---
 
 <Base title="AstroBuild.tips">
+	<HeaderTop client:load />
+	<Header title="AstroBuild.tips" />
 	<PostsLayout post={post}>
 		<Content />
 	</PostsLayout>
+
+	<Footer>
+		<Social />
+	</Footer>
 </Base>
